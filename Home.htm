@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zeyad Movie</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* General Styles */
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #1a1a1a;
+      color: #fff;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23222" /><path d="M0 0L100 100" stroke="%23333" stroke-width="2" /><path d="M100 0L0 100" stroke="%23333" stroke-width="2" /></svg>');
+      background-attachment: fixed;
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #222;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #444;
+      border-radius: 5px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
+    header {
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      background: linear-gradient(to right, #00cc66, #00b359);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 10px rgba(0, 204, 102, 0.3);
+    }
+
+    .search-container {
+      position: relative;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    #search {
+      padding: 12px 40px 12px 15px;
+      width: 300px;
+      border: none;
+      border-radius: 25px;
+      background: #333;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    #search:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #00cc66;
+      background: #444;
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #aaa;
+    }
+
+    header button {
+      padding: 10px 20px;
+      margin-left: 10px;
+      border: none;
+      border-radius: 5px;
+      background: linear-gradient(to right, #00cc66, #00b359);
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+    }
+
+    header button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    main {
+      padding: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .categories {
+      margin-bottom: 30px;
+    }
+
+    .categories h2 {
+      border-left: 4px solid #00cc66;
+      padding-left: 10px;
+      margin-bottom: 15px;
+    }
+
+    .category-list {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .category-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      background-color: #333;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+    }
+
+    .category-btn.active {
+      background: linear-gradient(to right, #00cc66, #00b359);
+    }
+
+    .category-btn:hover {
+      background: linear-gradient(to right, #ff3c3c, #ff1a1a);
+      transform: translateY(-2px);
+    }
+
+    .movies .movie-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 25px;
+    }
+
+    .movie-card {
+      background-color: #222;
+      border-radius: 10px;
+      overflow: hidden;
+      text-align: center;
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .movie-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .movie-card img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 10px 10px 0 0;
+      transition: transform 0.5s ease;
+    }
+
+    .movie-card:hover img {
+      transform: scale(1.1);
+    }
+
+    .movie-card h3 {
+      margin: 15px 0 5px;
+      font-size: 1.2rem;
+      padding: 0 10px;
+    }
+
+    .movie-card p {
+      margin: 5px 0;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    .movie-info {
+      padding: 15px;
+    }
+
+    .movie-card .favorite-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: rgba(0, 0, 0, 0.6);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .movie-card .favorite-btn:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+      transform: scale(1.1);
+    }
+
+    .movie-card .favorite-btn.active {
+      color: #ff3c3c;
+    }
+
+    .movie-card .download-btn {
+      padding: 10px 20px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+      background: linear-gradient(to right, #00cc66, #00b359);
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+    }
+
+    .movie-card .download-btn:hover {
+      background: linear-gradient(to right, #ff3c3c, #ff1a1a);
+      transform: translateY(-2px);
+    }
+
+    /* Star Rating Styles */
+    .star-rating {
+      display: flex;
+      gap: 5px;
+      margin: 10px 0;
+      justify-content: center;
+    }
+
+    .star {
+      cursor: pointer;
+      font-size: 20px;
+      color: #444;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .star:hover {
+      transform: scale(1.2);
+    }
+
+    .star.active {
+      color: #ffcc00;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal.show {
+      opacity: 1;
+    }
+
+    .modal-content {
+      background: linear-gradient(to bottom right, #222, #333);
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 600px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+
+    .modal.show .modal-content {
+      transform: scale(1);
+    }
+
+    .modal .close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 28px;
+      cursor: pointer;
+      color: #aaa;
+      transition: color 0.3s ease;
+    }
+
+    .modal .close:hover {
+      color: #fff;
+    }
+
+    .favorites-list, .download-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .favorite-item, .download-item {
+      background-color: #333;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .favorite-item:hover, .download-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .favorite-item h3, .download-item h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .favorite-item p, .download-item p {
+      margin: 5px 0;
+      color: #aaa;
+      font-size: 0.8rem;
+    }
+
+    .favorite-item .delete-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background-color: #e50914;
+      border: none;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .favorite-item .delete-btn:hover {
+      background-color: #ff3c3c;
+      transform: scale(1.1);
+    }
+
+    #download-all-favorites {
+      padding: 12px 25px;
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 5px;
+      background: linear-gradient(to right, #00cc66, #00b359);
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+    }
+
+    #download-all-favorites:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Welcome Modal Styles */
+    .welcome-modal {
+      text-align: center;
+    }
+
+    .welcome-modal h2 {
+      color: #00cc66;
+      margin-bottom: 10px;
+    }
+
+    .welcome-modal p {
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .website-rating {
+      margin: 20px 0;
+    }
+
+    /* Loading Animation */
+    .loader {
+      display: none;
+      width: 50px;
+      height: 50px;
+      border: 5px solid #333;
+      border-radius: 50%;
+      border-top: 5px solid #00cc66;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #333;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 5px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      
+      #search {
+        width: 200px;
+      }
+      
+      .movie-list {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding: 15px;
+      }
+      
+      header h1 {
+        font-size: 1.8rem;
+      }
+      
+      .search-container {
+        width: 100%;
+        margin-top: 15px;
+      }
+      
+      #search {
+        width: 100%;
+      }
+      
+      .category-btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+      }
+      
+      .movie-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Animation for page load */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .movie-card {
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    /* Delay for staggered animation */
+    .movie-card:nth-child(1) { animation-delay: 0.1s; }
+    .movie-card:nth-child(2) { animation-delay: 0.2s; }
+    .movie-card:nth-child(3) { animation-delay: 0.3s; }
+    .movie-card:nth-child(4) { animation-delay: 0.4s; }
+    .movie-card:nth-child(5) { animation-delay: 0.5s; }
+    .movie-card:nth-child(6) { animation-delay: 0.6s; }
+    .movie-card:nth-child(7) { animation-delay: 0.7s; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Zeyad Movies</h1>
+    <div class="search-container">
+      <input type="text" id="search" placeholder="Search movies...">
+      <div class="search-icon"><i class="fas fa-search"></i></div>
+    </div>
+    <button id="view-favorites"><i class="fas fa-heart"></i> View Favorites</button>
+  </header>
+
+  <main>
+    <section class="categories">
+      <h2>Categories</h2>
+      <div class="category-list">
+        <button class="category-btn active" data-category="all">All</button>
+        <button class="category-btn" data-category="Action">Action</button>
+        <button class="category-btn" data-category="Kids">Kids</button>
+        <button class="category-btn" data-category="Horror">Horror</button>
+        <!-- <button class="category-btn" data-category="Comedy">Comedy</button>
+        <button class="category-btn" data-category="Drama">Drama</button> -->
+      </div>
+    </section>
+
+    <section class="movies">
+      <h2>Popular Movies</h2>
+      <div class="loader" id="loader"></div>
+      <div class="movie-list" id="movie-list">
+        <!-- Movies will be dynamically added here -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Favorites Modal -->
+  <div id="favorites-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Your Favorites</h2>
+      <button id="download-all-favorites"><i class="fas fa-download"></i> Download All Favorites</button>
+      <div class="favorites-list" id="favorites-list">
+        <!-- Favorite movies will be added here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Welcome Modal -->
+  <div id="welcome-modal" class="modal">
+    <div class="modal-content welcome-modal">
+      <h2>Welcome to Zeyad Movies!</h2>
+      <p>Discover your next favorite movie. Browse our collection, add movies to your favorites, and download them for offline viewing.</p>
+      
+      <div class="website-rating">
+        <h3>How would you rate our website?</h3>
+        <div class="star-rating" id="website-rating">
+          <span class="star" data-rating="1">&#9733;</span>
+          <span class="star" data-rating="2">&#9733;</span>
+          <span class="star" data-rating="3">&#9733;</span>
+          <span class="star" data-rating="4">&#9733;</span>
+          <span class="star" data-rating="5">&#9733;</span>
+        </div>
+        <p id="rating-text">Please rate our website</p>
+      </div>
+      
+      <button id="start-browsing">Start Browsing</button>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // Enhanced movie data
+    const movies = [
+      {
+        title: "Venom 2018",
+        category: "Action",
+        image: "images/Venom(1).jpg",
+        detailsPage: "Venom 2018.html",
+        videoUrl: "Video/mkv/Venom.2018.720p.BRRip.HEVC.MkvCage.www.P30Day.com.mkv",
+        description: "A failed reporter is bonded to an alien entity, one of many symbiotes who have invaded Earth. But the being takes a liking to Earth and decides to protect it."
+      },
+      {
+        title: "Let There Be Carnage",
+        category: "Action",
+        image: "images/Venom(2).jpg",
+        detailsPage: "Venom_Let_There_Be_Carnage.html",
+        videoUrl: "Video/mkv/Venom_Let_There_Be_Carnage - Copy.mkv",
+        description: "Eddie Brock attempts to reignite his career by interviewing serial killer Cletus Kasady, who becomes the host of the symbiote Carnage and escapes prison after a failed execution."
+      },
+            {
+        title: "Interstellar",
+        category: "Action",
+        image: "images/interstellar.jpg",
+        detailsPage: "Interstellar.html",
+        videoUrl: "Video/mkv/Interstellar_2014 - Copy.mkv",
+        description: "When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team of researchers, to find a new planet for humans."
+      },
+      {
+        title: "The Martian 2015",
+        category: "Action",
+        image: "images/The Martian 2015.jpg",
+        detailsPage: "The Martian 2015.html",
+        videoUrl: "Video/mkv/The Martian 2015.mkv",
+        description: "An astronaut becomes stranded on Mars after his team assumes him dead, and must rely on his ingenuity to find a way to signal to Earth that he is alive and can survive until a potential rescue."
+      },
+      {
+        title: "Ratatouille",
+        category: "Kids",
+        image: "images/Ratatouille.jpg",
+        detailsPage: "Ratatouille.html",
+        videoUrl: "Video/mkv/Ratatouille - Copy.mkv",
+        description: "A Rat Who Can Cook Makes an Unusual Alliance With A Young Kitchen Worker At A Famous Paris Restaurant."
+      },
+      {
+        title: "Cars",
+        category: "Kids",
+        image: "images/Cars_2006.jpg",
+        detailsPage: "Spirit Stallion.html",
+        videoUrl: "video/mkv/Car.mkv",
+        description: "On The Way To The Niggest Race of His Iife, A Hotshot Rookie Race Car Gets Stranded In S Rundown Town And Iearns That Winning Isn't Everything In Iife."
+      },
+      {
+        title: "Spirit Stallion",
+        category: "Kids",
+        image: "images/Spirit Stallion.jpg",
+        detailsPage: "Spirit Stallion.html",
+        videoUrl: "video/mkv/Spirit_Stallion.mkv",
+        description: "A Captured Mustang Remains Determined to Return to His Herd No Matter What."
+      },
+      {
+        title: "Tarzan 1999",
+        category: "Kids",
+        image: "images/Tarzan.jpg",
+        detailsPage: "Tarzan.html",
+        videoUrl: "video/mkv/Tarzan 1999.mkv",
+        description: "A Man Raised by Gorillas Must Decide where he Really Belongs when he Discovers he is a Human."
+      },
+      {
+        title: "I Am Legend",
+        category: "Horror",
+        image: "images/l am the legend 1.jpg",
+        detailsPage: "l am the legend 1.html",
+        videoUrl: "video/mkv/l am the legend 1.mkv",
+        description: "Years After A Plague Kills Most of Humanity and Transforms The Rest into Monsters."
+      },
+      {
+        title: "I Am Legend 2",
+        category: "Horror",
+        image: "images/I Am Legend 2.jpg",
+        detailsPage: "#",
+        description: "Coming Soon"
+      },
+    ];
+
+    // DOM Elements
+    const movieList = document.getElementById("movie-list");
+    const searchInput = document.getElementById("search");
+    const categoryButtons = document.querySelectorAll(".category-btn");
+    const viewFavoritesBtn = document.getElementById("view-favorites");
+    const favoritesModal = document.getElementById("favorites-modal");
+    const welcomeModal = document.getElementById("welcome-modal");
+    const favoritesList = document.getElementById("favorites-list");
+    const closeModalButtons = document.querySelectorAll(".close");
+    const downloadAllFavoritesBtn = document.getElementById("download-all-favorites");
+    const startBrowsingBtn = document.getElementById("start-browsing");
+    const websiteRating = document.getElementById("website-rating");
+    const ratingText = document.getElementById("rating-text");
+    const loader = document.getElementById("loader");
+    const toast = document.getElementById("toast");
+
+    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    let ratings = JSON.parse(localStorage.getItem("ratings")) || {};
+    let websiteRated = localStorage.getItem("websiteRated") || false;
+
+    // Initialize the page
+    function init() {
+      // Show welcome modal if not rated yet
+      if (!websiteRated) {
+        setTimeout(() => {
+          showModal(welcomeModal);
+        }, 1000);
+      }
+      
+      // Display all movies
+      displayMovies(movies);
+      
+      // Load favorites
+      displayFavorites();
+    }
+
+    // Display movies with animation
+    function displayMovies(moviesToShow) {
+      // Show loader
+      loader.style.display = 'block';
+      movieList.style.opacity = '0.5';
+      
+      // Simulate loading delay for better UX
+      setTimeout(() => {
+        movieList.innerHTML = moviesToShow
+          .map(
+            (movie) => `
+            <div class="movie-card">
+              <a href="${movie.detailsPage}" target="_blank">
+                <img src="${movie.image}" alt="${movie.title}" onerror="this.src='https://via.placeholder.com/300x450/333/fff?text=No+Image'">
+              </a>
+              <div class="movie-info">
+                <h3>${movie.title}</h3>
+                <p>${movie.category}</p>
+                <p class="movie-description">${movie.description || 'No description available'}</p>
+                <div class="star-rating" data-movie-title="${movie.title}">
+                  ${Array.from({ length: 5 }, (_, i) => `
+                    <span class="star" data-rating="${i + 1}">&#9733;</span>
+                  `).join("")}
+                </div>
+                <button class="download-btn" onclick="downloadVideo('${movie.videoUrl}')" ${!movie.videoUrl ? 'disabled' : ''}>
+                  <i class="fas fa-download"></i> Download
+                </button>
+              </div>
+              <button class="favorite-btn" onclick="toggleFavorite(this, '${movie.title}')" aria-label="Add to favorites">
+                <i class="${favorites.some(fav => fav.title === movie.title) ? 'fas' : 'far'} fa-heart"></i>
+              </button>
+            </div>
+          `
+          )
+          .join("");
+
+        // Hide loader
+        loader.style.display = 'none';
+        movieList.style.opacity = '1';
+        
+        // Initialize star ratings
+        initializeStarRatings();
+      }, 800);
+    }
+
+    // Filter movies by category
+    categoryButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const category = button.dataset.category;
+        const filteredMovies = category === "all" ? movies : movies.filter((movie) => movie.category === category);
+        displayMovies(filteredMovies);
+
+        // Update active button
+        categoryButtons.forEach((btn) => btn.classList.remove("active"));
+        button.classList.add("active");
+      });
+    });
+
+    // Search functionality with debounce
+    let searchTimeout;
+    searchInput.addEventListener("input", (e) => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        const searchTerm = e.target.value.toLowerCase();
+        if (searchTerm.length === 0) {
+          displayMovies(movies);
+          return;
+        }
+        
+        const filteredMovies = movies.filter((movie) => 
+          movie.title.toLowerCase().includes(searchTerm) || 
+          movie.description.toLowerCase().includes(searchTerm)
+        );
+        displayMovies(filteredMovies);
+      }, 300);
+    });
+
+    // Add to favorites
+    function addToFavorites(movie) {
+      if (!favorites.some((fav) => fav.title === movie.title)) {
+        favorites.push(movie);
+        localStorage.setItem("favorites", JSON.stringify(favorites));
+        displayFavorites();
+        showToast('Added to favorites!');
+      }
+    }
+
+    // Remove from favorites
+    function removeFromFavorites(movie) {
+      favorites = favorites.filter((fav) => fav.title !== movie.title);
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+      displayFavorites();
+      showToast('Removed from favorites!');
+    }
+
+    // Display favorites
+    function displayFavorites() {
+      favoritesList.innerHTML = favorites.length > 0 
+        ? favorites
+            .map(
+              (movie) => `
+              <div class="favorite-item">
+                <button class="delete-btn" onclick="removeFromFavoritesByTitle('${movie.title}')">×</button>
+                <h3>${movie.title}</h3>
+                <p>${movie.category}</p>
+              </div>
+            `
+            )
+            .join("")
+        : '<p>No Favorites Yet Start Adding Some ⌛</p>';
+    }
+
+    // Remove from favorites by title
+    function removeFromFavoritesByTitle(title) {
+      const movie = movies.find((m) => m.title === title);
+      removeFromFavorites(movie);
+    }
+
+    // Toggle favorite
+    function toggleFavorite(button, title) {
+      const movie = movies.find((m) => m.title === title);
+      if (favorites.some((fav) => fav.title === title)) {
+        button.innerHTML = '<i class="far fa-heart"></i>';
+        removeFromFavorites(movie);
+      } else {
+        button.innerHTML = '<i class="fas fa-heart"></i>';
+        addToFavorites(movie);
+      }
+    }
+
+    // Download video
+    function downloadVideo(videoUrl) {
+      if (!videoUrl) {
+        showToast('Download not available for this movie!');
+        return;
+      }
+      
+      showToast('Starting download...');
+      
+      // Simulate download process
+      setTimeout(() => {
+        const a = document.createElement("a");
+        a.href = videoUrl;
+        a.download = videoUrl.split("/").pop();
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast('Download completed!');
+      }, 1500);
+    }
+
+    // Download all favorites
+    downloadAllFavoritesBtn.addEventListener("click", () => {
+      if (favorites.length === 0) {
+        showToast('No favorites to download!');
+        return;
+      }
+      
+      showToast('Preparing your downloads...');
+      
+      // Simulate preparing downloads
+      setTimeout(() => {
+        let downloaded = 0;
+        favorites.forEach((movie) => {
+          if (movie.videoUrl) {
+            downloaded++;
+            const a = document.createElement("a");
+            a.href = movie.videoUrl;
+            a.download = movie.videoUrl.split("/").pop();
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }
+        });
+        
+        if (downloaded > 0) {
+          showToast(`Downloaded ${downloaded} movies!`);
+        } else {
+          showToast('No downloadable movies in favorites!');
+        }
+      }, 2000);
+    });
+
+    // Handle star clicks for movie ratings
+    function handleStarClick(event) {
+      const star = event.target;
+      const rating = parseInt(star.dataset.rating);
+      const movieTitle = star.closest(".star-rating").dataset.movieTitle;
+
+      // Save the rating
+      ratings[movieTitle] = rating;
+      localStorage.setItem("ratings", JSON.stringify(ratings));
+
+      // Update the star display
+      updateStars(movieTitle, rating);
+      
+      showToast(`Rated ${movieTitle}: ${rating} stars!`);
+    }
+
+    // Update stars based on the selected rating
+    function updateStars(movieTitle, rating) {
+      const starRatingContainer = document.querySelector(`.star-rating[data-movie-title="${movieTitle}"]`);
+      if (!starRatingContainer) return;
+      
+      const stars = starRatingContainer.querySelectorAll(".star");
+      stars.forEach((star, index) => {
+        if (index < rating) {
+          star.classList.add("active");
+        } else {
+          star.classList.remove("active");
+        }
+      });
+    }
+
+    // Initialize star ratings when the page loads
+    function initializeStarRatings() {
+      const starRatingContainers = document.querySelectorAll(".star-rating");
+      starRatingContainers.forEach((container) => {
+        const movieTitle = container.dataset.movieTitle;
+        const rating = ratings[movieTitle] || 0;
+        updateStars(movieTitle, rating);
+      });
+    }
+
+    // Handle website rating
+    websiteRating.addEventListener("click", (event) => {
+      if (event.target.classList.contains("star")) {
+        const rating = parseInt(event.target.dataset.rating);
+        const stars = websiteRating.querySelectorAll(".star");
+        
+        stars.forEach((star, index) => {
+          if (index < rating) {
+            star.classList.add("active");
+          } else {
+            star.classList.remove("active");
+          }
+        });
+        
+        ratingText.textContent = `You rated us: ${rating} star${rating > 1 ? 's' : ''}`;
+        localStorage.setItem("websiteRated", rating);
+        websiteRated = rating;
+        
+        showToast('Thanks for your rating!');
+      }
+    });
+
+    // Modal functions
+    function showModal(modal) {
+      modal.classList.add("show");
+      modal.style.display = "flex";
+    }
+
+    function hideModal(modal) {
+      modal.classList.remove("show");
+      setTimeout(() => {
+        modal.style.display = "none";
+      }, 300);
+    }
+
+    // Open favorites modal
+    viewFavoritesBtn.addEventListener("click", () => {
+      showModal(favoritesModal);
+    });
+
+    // Close modals
+    closeModalButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        hideModal(favoritesModal);
+      });
+    });
+
+    // Start browsing button
+    startBrowsingBtn.addEventListener("click", () => {
+      hideModal(welcomeModal);
+    });
+
+    // Close modal on outside click
+    window.addEventListener("click", (event) => {
+      if (event.target === favoritesModal) {
+        hideModal(favoritesModal);
+      }
+      if (event.target === welcomeModal) {
+        hideModal(welcomeModal);
+      }
+    });
+
+    // Show toast notification
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000);
+    }
+
+    // Attach event listeners to stars
+    document.addEventListener("click", (event) => {
+      if (event.target.classList.contains("star")) {
+        // Check if it's a movie rating star
+        if (event.target.closest('.star-rating') !== websiteRating) {
+          handleStarClick(event);
+        }
+      }
+    });
+
+    // Initialize the application
+    init();
+  </script>
+</body>
+</html>

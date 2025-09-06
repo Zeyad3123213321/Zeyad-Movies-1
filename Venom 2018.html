@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Website - Venom 2018</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* General Styles - Matching the first website */
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: #fff;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23222" /><path d="M0 0L100 100" stroke="%23333" stroke-width="2" /><path d="M100 0L0 100" stroke="%23333" stroke-width="2" /></svg>');
+            background-attachment: fixed;
+            line-height: 1.6;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #222;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        h1, h2, h3 {
+            color: #00cc66;
+        }
+
+        p {
+            margin: 15px 0;
+            font-size: 1em;
+            color: #ccc;
+        }
+
+        button {
+            background: linear-gradient(to right, #00cc66, #00b359);
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Header - Matching the first website */
+        header {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, #00cc66, #00b359);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(0, 204, 102, 0.3);
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 15px 0 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        nav ul li {
+            margin: 0;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            background-color: #333;
+        }
+
+        nav ul li a:hover {
+            background: linear-gradient(to right, #ff3c3c, #ff1a1a);
+            transform: translateY(-2px);
+        }
+
+        nav ul li button {
+            margin: 0;
+        }
+
+        /* Main Content */
+        main {
+            padding: 150px 20px 100px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        section {
+            background: linear-gradient(to bottom right, #222, #333);
+            margin-bottom: 30px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        section.fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Download Button Styles */
+        .download-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .download-btn {
+            background: linear-gradient(to right, #00cc66, #00b359);
+            padding: 15px 30px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(to right, #ff3c3c, #ff1a1a);
+        }
+
+        .file-info {
+            font-size: 0.9em;
+            color: #aaa;
+            margin: 10px 0 20px;
+        }
+
+        /* Video Container */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            margin: 30px 0;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
+        }
+
+        /* Cast Section */
+        .cast-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .cast-member {
+            text-align: center;
+            background-color: #333;
+            padding: 15px;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cast-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .cast-member img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* Reviews Section */
+        .review {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .review:hover {
+            transform: translateY(-3px);
+        }
+
+        .review p {
+            margin: 0;
+            font-style: italic;
+        }
+
+        /* Feedback Form */
+        .feedback-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .feedback-form input,
+        .feedback-form textarea {
+            padding: 12px 15px;
+            border: 2px solid #444;
+            border-radius: 5px;
+            font-size: 1em;
+            background-color: #333;
+            color: #fff;
+            transition: border-color 0.3s ease;
+        }
+
+        .feedback-form input:focus,
+        .feedback-form textarea:focus {
+            outline: none;
+            border-color: #00cc66;
+        }
+
+        .feedback-form textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .feedback-form button {
+            align-self: flex-start;
+        }
+
+        /* Footer */
+        footer {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #333;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Animation for page load */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        section {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* Delay for staggered animation */
+        section:nth-child(1) { animation-delay: 0.1s; }
+        section:nth-child(2) { animation-delay: 0.2s; }
+        section:nth-child(3) { animation-delay: 0.3s; }
+        section:nth-child(4) { animation-delay: 0.4s; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            nav ul li {
+                width: 100%;
+            }
+            
+            nav ul li a,
+            nav ul li button {
+                width: 100%;
+                text-align: center;
+            }
+
+            main {
+                padding: 130px 15px 90px;
+            }
+
+            section {
+                padding: 20px;
+            }
+
+            .cast-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 15px;
+            }
+            
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            main {
+                padding: 120px 10px 80px;
+            }
+            
+            section {
+                padding: 15px;
+            }
+            
+            .download-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Venom 2018</h1>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#cast">Cast</a></li>
+                <li><a href="#reviews">Reviews</a></li>
+                <li><a href="#feedback">Feedback</a></li>
+                <!-- <li><button onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Toggle Dark Mode</button></li> -->
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- About Section -->
+        <section id="about">
+            <h2>About the Movie</h2>
+            <p>Journalist Eddie Brock is trying to take down Carlton Drake, the notorious and brilliant founder of the Life Foundation. While investigating one of Drake's experiments, Eddie's body merges with the alien Venom — leaving him with superhuman strength and power. Twisted, dark and fueled by rage, Venom tries to control the new and dangerous abilities that Eddie finds so intoxicating.</p>
+            
+            <!-- Download Button Section -->
+            <div class="video-container">
+                <video controls>
+                    <source src="Video/Venom.2018.mkv" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <!-- <div class="download-container">
+                <button id="downloadBtn" class="download-btn"><i class="fas fa-download"></i> Download Media Pack (ZIP)</button>
+                <p class="file-info">Includes wallpapers and screenshots (25MB)</p>
+            </div> -->
+        </section>
+
+        <!-- Cast Section -->
+        <section id="cast">
+            <h2>Cast</h2>
+            <div class="cast-grid">
+                <div class="cast-member">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyBAsi90V_jGlEqJVCTQ8rpVrcVEtZmurnEQ&s" alt="Tom Hardy">
+                    <h3>Tom Hardy</h3>
+                    <p>Eddie Brock / Venom</p>
+                </div>
+                <div class="cast-member">
+                    <img src="https://hips.hearstapps.com/hmg-prod/images/michelle-williams-venom-671a20b6787c7.jpg?crop=0.502xw:0.335xh;0.259xw,0.192xh&resize=1200:*" alt="Michelle Williams">
+                    <h3>Michelle Williams</h3>
+                    <p>Anne Weying</p>
+                </div>
+                <div class="cast-member">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGwUdkYCP5WYJsdBk7l4-nl1XpLKavUZjF44TjnCZ-2zRwMy6huSAhapphapeoDni6TCI&usqp=CAU" alt="Riz Ahmed">
+                    <h3>Riz Ahmed</h3>
+                    <p>Carlton Drake / Riot</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reviews Section -->
+        <section id="reviews">
+            <h2>Reviews</h2>
+            <div class="review">
+                <p>"Venom's first standalone movie turns out to be like the comics character in all the wrong ways - chaotic, noisy, and in desperate need of a stronger attachment to Spider-Man."</p>
+            </div>
+            <div class="review">
+                <p>"Some truly fun odd-couple chemistry plus the right blend of action and comedy make Venom's messy plot easy to forgive."</p>
+            </div>
+            <div class="review">
+                <p>"Venom isn't quite so satisfying in its action department, but the main character(s) possess enough charm together to not suck the life out of the film completely."</p>
+            </div>
+            <div class="review">
+                <p>"Venom tried something new in a familiar world of pop culture. The foundation built on fleshing out Brock's character and motivations made it stand on its own as canon."</p>
+            </div>
+        </section>
+
+        <!-- Feedback Section -->
+        <section id="feedback">
+            <h2>Feedback</h2>
+            <form class="feedback-form" onsubmit="submitFeedback(event)">
+                <input type="text" id="name" placeholder="Your Name" required>
+                <input type="email" id="email" placeholder="Your Email" required>
+                <textarea id="message" placeholder="Your Feedback" required></textarea>
+                <button type="submit"><i class="fas fa-paper-plane"></i> Submit Feedback</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>Copyright © 2025 Venom Movie Website | Part of Zeyad Movies</p>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- JavaScript -->
+    <script>
+        // Toggle dark mode
+        function toggleDarkMode() {
+            // Since our design is dark by default, we'll implement a light mode
+            document.body.classList.toggle("light-mode");
+            
+            if (document.body.classList.contains("light-mode")) {
+                // Change to light mode
+                document.body.style.backgroundColor = "#f9f9f9";
+                document.body.style.color = "#333";
+                document.body.style.backgroundImage = "none";
+                
+                // Update toast for light mode
+                showToast("Light mode activated");
+            } else {
+                // Change back to dark mode
+                document.body.style.backgroundColor = "#1a1a1a";
+                document.body.style.color = "#fff";
+                document.body.style.backgroundImage = "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\"><rect width=\"100\" height=\"100\" fill=\"%23222\" /><path d=\"M0 0L100 100\" stroke=\"%23333\" stroke-width=\"2\" /><path d=\"M100 0L0 100\" stroke=\"%23333\" stroke-width=\"2\" /></svg>')";
+                
+                showToast("Dark mode activated");
+            }
+
+            // Save user preference in localStorage
+            const isLightMode = document.body.classList.contains("light-mode");
+            localStorage.setItem("lightMode", isLightMode);
+        }
+
+        // Check for saved user preference on page load
+        function checkColorPreference() {
+            const savedLightMode = localStorage.getItem("lightMode");
+
+            if (savedLightMode === "true") {
+                // Apply light mode if it was saved
+                document.body.classList.add("light-mode");
+                document.body.style.backgroundColor = "#f9f9f9";
+                document.body.style.color = "#333";
+                document.body.style.backgroundImage = "none";
+            }
+        }
+
+        // Submit feedback form
+        function submitFeedback(event) {
+            event.preventDefault();
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const message = document.getElementById("message").value;
+
+            showToast(`Thank you, ${name}! Your feedback has been submitted.`);
+            console.log({ name, email, message });
+            event.target.reset();
+        }
+
+        // Download ZIP file function
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            // Replace with your actual ZIP file URL when hosted
+            const zipFileUrl = 'Zip/Venom_2018.zip';
+            
+            // Create temporary link to trigger download
+            const a = document.createElement('a');
+            a.href = zipFileUrl;
+            a.download = 'Venom-2018-Media-Pack.zip';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            showToast('Download started!');
+        });
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.classList.add("show");
+            
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+
+        // Smooth scrolling and fade-in animations
+        document.addEventListener("DOMContentLoaded", function() {
+            const navLinks = document.querySelectorAll("nav ul li a");
+
+            navLinks.forEach(link => {
+                link.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    const targetId = this.getAttribute("href").substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    targetSection.scrollIntoView({ behavior: "smooth" });
+                });
+            });
+
+            const sections = document.querySelectorAll("section");
+
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("fade-in");
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // Check color preference on page load
+            checkColorPreference();
+        });
+    </script>
+</body>
+</html>
